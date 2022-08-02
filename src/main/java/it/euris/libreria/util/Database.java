@@ -15,17 +15,25 @@ import org.jdom2.input.SAXBuilder;
 
 public class Database {
 
-	private Connection conn;
+	private static Connection conn;
 
-	public Connection getConn() {
+	public static Connection getConnection()
+			throws FileNotFoundException, ClassNotFoundException, IOException, JDOMException, SQLException {
+		
+		if (conn == null) {
+			connect();
+		}
+		
 		return conn;
 	}
-
-	public void setConn(Connection conn) {
-		this.conn = conn;
+	
+	public static void closeConnection() throws SQLException {
+		if (conn != null) {
+			conn.close();
+		}
 	}
 
-	public boolean connetti()
+	private static boolean connect()
 			throws FileNotFoundException, IOException, JDOMException, SQLException, ClassNotFoundException {
 
 		String connectionUrl = null;
