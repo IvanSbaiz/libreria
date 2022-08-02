@@ -22,7 +22,9 @@ public class LibreriaApplication {
 		LibriService libriService = context.getBean(LibriService.class);
 		
 		Autori autore = autoriService.getById(1L);
-		System.out.println("Autore trovato: " + autore.getId() + " - " + autore.getNome() + " " + autore.getCognome());
+		if (autore != null) {
+			System.out.println("Autore trovato: " + autore.getId() + " - " + autore.getNome() + " " + autore.getCognome());
+		}
 		
 		List<Libri> libriList = libriService.getByTitolo("I promessi sposi");
 		for(Libri libro : libriList) {
