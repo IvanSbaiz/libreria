@@ -5,16 +5,20 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import it.euris.libreria.data.model.Autori;
 import it.euris.libreria.data.model.Libri;
+import it.euris.libreria.repository.AutoriRepository;
 import it.euris.libreria.repository.LibriRepository;
 
 @Service
 public class LibriService {
 
 	private LibriRepository libriRepository;
+	private AutoriRepository autoriRepository;
 	
-	public LibriService(LibriRepository libriRepository) {
+	public LibriService(LibriRepository libriRepository, AutoriRepository autoriRepository) {
 		this.libriRepository = libriRepository;
+		this.autoriRepository = autoriRepository;
 	}
 	
 	public Libri getById(Long id) {
@@ -24,6 +28,10 @@ public class LibriService {
 		}
 		
 		return null;
+	}
+	
+	public List<Libri> getAll() {
+		return libriRepository.findAll();
 	}
 	
 	public List<Libri> getByTitolo(String titolo) {
@@ -40,6 +48,13 @@ public class LibriService {
 	
 	public void deleteAll() {
 		libriRepository.deleteAll();
+	}
+	
+	public void deleteByIdAutore(Long idAutore) {
+		Optional<Autori> autore = autoriRepository.findById(idAutore);
+		if (autore.isPresent()) {
+			libriRepository.deleteByAutore(autore.get());
+		}
 	}
 
 }
