@@ -37,5 +37,9 @@ public class LibriService {
 	public void delete(Libri libro) {
 		libriRepository.delete(libro);
 	}
+	
+	public void deleteAll() {
+		libriRepository.deleteAll();
+	}
 
 }

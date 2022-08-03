@@ -26,10 +26,15 @@ public class AutoriService {
 	}
 	
 	public Autori save(Autori autore) {
-		return autoriRepository.save(autore);
+		Autori autoreToSave = Autori.builder().nome(autore.getNome()).cognome(autore.getCognome()).build();
+		return autoriRepository.save(autoreToSave);
 	}
 	
 	public void delete(Autori autore) {
 		autoriRepository.delete(autore);
+	}
+	
+	public void deleteAll() {
+		autoriRepository.deleteAll();
 	}
 }

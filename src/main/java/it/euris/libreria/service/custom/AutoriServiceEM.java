@@ -12,10 +12,12 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import it.euris.libreria.data.model.Autori;
 
 @Service
+@Transactional
 public class AutoriServiceEM {
 	
 	@PersistenceContext
