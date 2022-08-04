@@ -52,7 +52,7 @@ public class AutoriController {
 	
 	@DeleteMapping
 	public void deleteAll() {
-		libriService.deleteAll();
+		// libriService.deleteAll();
 		autoriService.deleteAll();
 	}
 	
