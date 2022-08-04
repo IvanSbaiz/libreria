@@ -3,10 +3,12 @@ package it.euris.libreria.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import it.euris.libreria.data.model.Autori;
 import it.euris.libreria.data.model.Libri;
+import it.euris.libreria.data.response.GenericResponse;
 import it.euris.libreria.repository.AutoriRepository;
 import it.euris.libreria.repository.LibriRepository;
 
@@ -38,8 +40,61 @@ public class LibriService {
 		return libriRepository.getByTitolo(titolo);
 	}
 	
-	public Libri save(Libri libro) {
-		return libriRepository.save(libro);
+	public GenericResponse insert(Libri libro) {
+		
+		GenericResponse response = new GenericResponse();
+		
+		Optional<Autori> autore = autoriRepository.findById(libro.getAutore().getId());
+		if (autore.isPresent()) {
+			libro.setAutore(autore.get());
+			Libri libroSaved = libriRepository.save(libro);
+			response.setBody(libroSaved.toDto());
+			response.setStatusCode(HttpStatus.CREATED);
+			response.setMessage("Libro salvato correttamente");
+		} else {
+			response.setStatusCode(HttpStatus.NOT_FOUND);
+			response.setMessage("Non è stato trovato l'autore");
+		}
+		
+		return response;
+	}
+	
+	public GenericResponse update(Libri libro) {
+		
+		GenericResponse response = new GenericResponse();
+		
+		if (libriRepository.findById(libro.getId()).isPresent()) {
+			
+			Optional<Autori> autore = autoriRepository.findById(libro.getAutore().getId());
+			if (autore.isPresent()) {
+				
+				libro.setAutore(autore.get());
+				response.setBody(libriRepository.save(libro).toDto());
+				response.setStatusCode(HttpStatus.OK);
+				response.setMessage("Libro aggiornato correttamente");
+				
+			} else {
+				response.setStatusCode(HttpStatus.NOT_FOUND);
+				response.setMessage("Libro non aggiornato. Non è stato trovato l'autore");
+			}
+			
+		} else {
+			response.setStatusCode(HttpStatus.NOT_FOUND);
+			response.setMessage("Libro da aggiornare non trovato nel database");
+		}
+		
+		return response;
+	}
+	
+	public GenericResponse deleteById(Long idLibro) {
+		
+		GenericResponse response = new GenericResponse();
+			
+		libriRepository.deleteById(idLibro);
+		response.setStatusCode(HttpStatus.OK);
+		response.setMessage("Libro correttamente cancellato");
+		
+		return response;
 	}
 	
 	public void delete(Libri libro) {

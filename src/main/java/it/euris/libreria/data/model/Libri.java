@@ -13,6 +13,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import it.euris.libreria.data.archetype.Model;
+import it.euris.libreria.data.dto.LibriDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Libri {
+public class Libri implements Model {
 	
 	public static final String FK_COLUMN = "autore";
 	
@@ -36,12 +38,22 @@ public class Libri {
 	@Column
 	private String titolo;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idautore")
 	@JsonBackReference
 	private Autori autore;
 	
 	@Column
 	private String isbn;
+
+	@Override
+	public LibriDto toDto() {
+		return LibriDto.builder()
+				.id(id)
+				.titolo(titolo)
+				.isbn(isbn)
+				.autore(autore.toDto())
+				.build();
+	}
 	
 }
