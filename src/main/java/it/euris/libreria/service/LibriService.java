@@ -7,9 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import it.euris.libreria.data.model.Autori;
+import it.euris.libreria.data.model.CasaEditrice;
 import it.euris.libreria.data.model.Libri;
 import it.euris.libreria.data.response.GenericResponse;
 import it.euris.libreria.repository.AutoriRepository;
+import it.euris.libreria.repository.CasaEditriceRepository;
 import it.euris.libreria.repository.LibriRepository;
 
 @Service
@@ -17,10 +19,12 @@ public class LibriService {
 
 	private LibriRepository libriRepository;
 	private AutoriRepository autoriRepository;
+	private CasaEditriceRepository casaEditriceRepository;
 	
-	public LibriService(LibriRepository libriRepository, AutoriRepository autoriRepository) {
+	public LibriService(LibriRepository libriRepository, AutoriRepository autoriRepository, CasaEditriceRepository casaEditriceRepository) {
 		this.libriRepository = libriRepository;
 		this.autoriRepository = autoriRepository;
+		this.casaEditriceRepository = casaEditriceRepository;
 	}
 	
 	public Libri getById(Long id) {
@@ -46,11 +50,24 @@ public class LibriService {
 		
 		Optional<Autori> autore = autoriRepository.findById(libro.getAutore().getId());
 		if (autore.isPresent()) {
+			
 			libro.setAutore(autore.get());
-			Libri libroSaved = libriRepository.save(libro);
-			response.setBody(libroSaved.toDto());
-			response.setStatusCode(HttpStatus.CREATED);
-			response.setMessage("Libro salvato correttamente");
+			
+			Optional<CasaEditrice> casaEditrice = casaEditriceRepository.findById(libro.getCasaEditrice().getId());
+			if (casaEditrice.isPresent()) {
+				
+				libro.setCasaEditrice(casaEditrice.get());
+				
+				Libri libroSaved = libriRepository.save(libro);
+				response.setBody(libroSaved.toDto());
+				response.setStatusCode(HttpStatus.CREATED);
+				response.setMessage("Libro salvato correttamente");
+				
+			} else {
+				response.setStatusCode(HttpStatus.NOT_FOUND);
+				response.setMessage("Non è stata trovata la casa editrice");
+			}
+			
 		} else {
 			response.setStatusCode(HttpStatus.NOT_FOUND);
 			response.setMessage("Non è stato trovato l'autore");

@@ -14,18 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 import it.euris.libreria.data.dto.AutoriDto;
 import it.euris.libreria.data.model.Autori;
 import it.euris.libreria.service.AutoriService;
-import it.euris.libreria.service.LibriService;
 
 @RestController
 @RequestMapping("/autori")
 public class AutoriController {
 	
 	private AutoriService autoriService;
-	private LibriService libriService;
 	
-	public AutoriController(AutoriService autoriService, LibriService libriService) {
+	public AutoriController(AutoriService autoriService) {
 		this.autoriService = autoriService;
-		this.libriService = libriService;
 	}
 	
 	// GET http://localhost:8080/autori
@@ -52,13 +49,11 @@ public class AutoriController {
 	
 	@DeleteMapping
 	public void deleteAll() {
-		// libriService.deleteAll();
 		autoriService.deleteAll();
 	}
 	
 	@DeleteMapping("/{idAutore}")
 	public void delete(@PathVariable Long idAutore) {
-		libriService.deleteByIdAutore(idAutore);
 		autoriService.deleteById(idAutore);
 	}
 

@@ -3,11 +3,9 @@ package it.euris.libreria.service;
 import java.util.List;
 
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.stereotype.Service;
 
 import it.euris.libreria.data.model.Autori;
 
-@Service
 public interface AutoriService {
 
 	public Autori getById(Long id);

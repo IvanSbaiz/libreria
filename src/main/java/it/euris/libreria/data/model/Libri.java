@@ -1,6 +1,5 @@
 package it.euris.libreria.data.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,32 +27,34 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Libri implements Model {
 	
-	public static final String FK_COLUMN = "autore";
-	
+	public static final String FK_COLUMN_AUTORE = "autore";
+	public static final String FK_COLUMN_CASAEDITRICE = "casaeditrice";
+
 	@Id
 	@Column
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column
 	private String titolo;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "idautore")
-	@JsonBackReference
-	private Autori autore;
-	
+
 	@Column
 	private String isbn;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idautore")
+	@JsonBackReference(value = "id_autore")
+	private Autori autore;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idcasaeditrice")
+	@JsonBackReference(value = "id_casaeditrice")
+	private CasaEditrice casaEditrice;
+
 	@Override
 	public LibriDto toDto() {
-		return LibriDto.builder()
-				.id(id)
-				.titolo(titolo)
-				.isbn(isbn)
-				.autore(autore.toDto())
-				.build();
+		return LibriDto.builder().id(id).titolo(titolo).isbn(isbn).autore(autore.toDto())
+				.casaEditrice(casaEditrice.toDto()).build();
 	}
-	
+
 }

@@ -62,7 +62,7 @@ public class LibriServiceEM {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Libri> query = cb.createQuery(Libri.class);
 		Root<Libri> rootLibri = query.from(Libri.class);
-		Join<Libri, Autori> joinAutori = rootLibri.join(Libri.FK_COLUMN, JoinType.INNER);
+		Join<Libri, Autori> joinAutori = rootLibri.join(Libri.FK_COLUMN_AUTORE, JoinType.INNER);
 
 		Path<String> pathTitolo = rootLibri.get("titolo");
 		Path<String> pathName = joinAutori.get("nome");

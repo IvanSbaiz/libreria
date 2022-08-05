@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="2022-08-05-create-table-casaeditrice-001" author="ale_dav">
+  	<comment>CREAAZIONE TABELLA CASA_EDITRICE</comment>
+  	
+  	<createTable tableName="casa_editrice">
+  		<column name="id" type="BIGINT" autoIncrement="true">
+  			<constraints primaryKey="true" primaryKeyName="pk_casaeditrice" />
+  		</column>
+  		<column name="nome" type="VARCHAR(100)">
+  			<constraints nullable="false" />
+  		</column>
+  	</createTable>
+  	
+  	<rollback>
+  		<dropTable tableName="casa_editrice"/>
+  	</rollback>
+  
+  </changeSet>
+  
+  <changeSet id="2022-08-05-create-table-casaeditrice-002" author="ale_dav">
+  
+  	<addColumn tableName="libri">
+  		<column name="idcasaeditrice" type="BIGINT">
+  			<constraints foreignKeyName="fk_casaeditrice" references="casa_editrice(id)" />
+  		</column>
+  	</addColumn>
+  
+  </changeSet>
+  
+</databaseChangeLog>

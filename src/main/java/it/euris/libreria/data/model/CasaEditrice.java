@@ -16,19 +16,19 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import it.euris.libreria.data.archetype.Model;
-import it.euris.libreria.data.dto.AutoriDto;
+import it.euris.libreria.data.dto.CasaEditriceDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Table
+@Table(name = "casa_editrice")
 @Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Autori implements Model {
+public class CasaEditrice implements Model {
 	
 	@Id
 	@Column
@@ -38,18 +38,14 @@ public class Autori implements Model {
 	@Column
 	private String nome;
 	
-	@Column
-	private String cognome;
-	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "autore")
-	@JsonManagedReference(value = "id_autore")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "casaEditrice")
+	@JsonManagedReference(value = "id_casaeditrice")
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private List<Libri> libri;
-
+	
 	@Override
-	public AutoriDto toDto() {
-		
-		return AutoriDto.builder().id(id).nome(nome).cognome(cognome).build();
+	public CasaEditriceDto toDto() {
+		return CasaEditriceDto.builder().id(id).nome(nome).build();
 	}
 
 }
